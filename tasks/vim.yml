@@ -1,0 +1,12 @@
+---
+
+- name: Clone Vundle.vim
+  git:
+    repo: 'https://github.com/VundleVim/Vundle.vim.git'
+    dest: ~/.vim/bundle/Vundle.vim
+
+- name: Copy vimrc to machine
+  copy:
+    src: files/vimrc
+    dest: ~/.vimrc
+    mode: '0660'

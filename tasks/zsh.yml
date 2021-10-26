@@ -1,0 +1,65 @@
+---
+
+- name: Find the path for zsh
+  command: 'which zsh'
+  register: zsh_path
+
+- name: Find my username
+  command: 'whoami'
+  register: myname
+
+- name: Change login shell
+  become: yes
+  user:
+    name: "{{ myname.stdout }}"
+    shell: "{{ zsh_path.stdout }}"
+
+- name: Get zshenv
+  get_url:
+    url: https://raw.githubusercontent.com/zimfw/install/master/src/templates/zshenv
+    dest: ~/.zshenv
+    mode: '0660'
+
+- name: Get zshrc
+  get_url:
+    url: https://raw.githubusercontent.com/zimfw/install/master/src/templates/zshrc
+    dest: ~/.zshrc
+    mode: '0660'
+
+- name: Get zlogin
+  get_url:
+    url: https://raw.githubusercontent.com/zimfw/install/master/src/templates/zlogin
+    dest: ~/.zlogin
+    mode: '0660'
+
+- name: Get zimrc
+  get_url:
+    url: https://raw.githubusercontent.com/zimfw/install/master/src/templates/zimrc
+    dest: ~/.zimrc
+    mode: '0660'
+
+- name: Create directory ~/.zim
+  file:
+    path: ~/.zim
+    state: directory
+    mode: '0770'
+
+- name: Get zimfw.zsh
+  get_url:
+    url: https://github.com/zimfw/zimfw/releases/latest/download/zimfw.zsh
+    dest: ~/.zim/zimfw.zsh
+    mode: '0660'
+
+- name: Install zimfw modules
+  command: 'zsh ~/.zim/zimfw.zsh install'
+
+- name: Append powerlevel10k module to zimrc
+  lineinfile:
+    path: ~/.zimrc
+    line: 'zmodule romkatv/powerlevel10k --use degit'
+    create: yes
+
+- name: Install powerlevel10k
+  pause:
+    prompt: "Please run 'zimfw install' after the process"
+    seconds: 5

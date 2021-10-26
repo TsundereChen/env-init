@@ -1,0 +1,12 @@
+---
+
+- name: Install packages
+  package:
+    name:
+      - git
+      - zsh
+      - python3
+      - vim
+      - wget
+      - tmux
+    state: latest

@@ -1,0 +1,13 @@
+---
+
+- hosts: all
+  name: Install packages
+  become: yes
+  tasks:
+  - import_tasks: tasks/package.yml
+
+- hosts: all
+  name: Set up ZSH environment
+  tasks:
+  - import_tasks: tasks/zsh.yml
+  - import_tasks: tasks/vim.yml
