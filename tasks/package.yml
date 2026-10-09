@@ -6,7 +6,15 @@
       - git
       - zsh
       - python3
-      - vim
+      - neovim
+      - tree-sitter-cli
+      - ripgrep
+      - nodejs
+      - npm
+      - gcc
+      - curl
+      - tar
+      - unzip
       - wget
       - tmux
     state: latest

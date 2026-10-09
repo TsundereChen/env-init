@@ -10,4 +10,8 @@
   name: Set up ZSH environment
   tasks:
   - import_tasks: tasks/zsh.yml
-  - import_tasks: tasks/vim.yml
+
+- hosts: all
+  name: Set up Neovim environment
+  tasks:
+  - import_tasks: tasks/nvim.yml

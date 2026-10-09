@@ -1,0 +1,43 @@
+---
+
+- name: Check the installed Neovim version
+  command: nvim --version
+  register: nvim_version
+  changed_when: false
+  check_mode: false
+
+- name: Require Neovim 0.12 or newer
+  assert:
+    that:
+      - (nvim_version.stdout_lines[0] | regex_search('[0-9]+[.][0-9]+[.][0-9]+')) is version('0.12.0', '>=')
+    fail_msg: "The Treesitter main branch requires Neovim >= 0.12.0. Upgrade Neovim before deploying this configuration."
+
+- name: Check the installed tree-sitter CLI version
+  command: tree-sitter --version
+  register: tree_sitter_version
+  changed_when: false
+  check_mode: false
+
+- name: Require tree-sitter CLI 0.26.1 or newer
+  assert:
+    that:
+      - (tree_sitter_version.stdout | regex_search('[0-9]+[.][0-9]+[.][0-9]+')) is version('0.26.1', '>=')
+    fail_msg: "The Treesitter main branch requires tree-sitter CLI >= 0.26.1, installed through your package manager rather than npm."
+
+- name: Create the Neovim config directory
+  file:
+    path: ~/.config/nvim
+    state: directory
+    mode: '0770'
+
+- name: Clone lazy.nvim
+  git:
+    repo: 'https://github.com/folke/lazy.nvim.git'
+    dest: ~/.local/share/nvim/lazy/lazy.nvim
+    version: stable
+
+- name: Copy the Neovim config to the machine
+  copy:
+    src: files/nvim/
+    dest: ~/.config/nvim/
+    mode: '0660'
